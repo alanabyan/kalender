@@ -1,4 +1,3 @@
-// app/controllers/auth_controller.ts
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import AccessToken from '#models/access_token'
@@ -30,6 +29,37 @@ export default class AuthController {
         id: user.id,
         nama: user.nama,
         username: user.username,
+        role: user.role,
+      },
+    })
+  }
+
+  public async register({ request, response }: HttpContext) {
+    const { nama, username, password } = request.only(['nama', 'username', 'password'])
+
+    const existingUser = await User.query()
+      .where('username', username)
+      .orWhere('nama', nama)
+      .first()
+    if (existingUser) {
+      return response.conflict({ error: 'Username atau nama sudah digunakan' })
+    }
+
+    const user = await User.create({
+      nama,
+      username,
+      password: await hash.make(password),
+      role: 'admin',
+      gender: 'L',
+    })
+
+    return response.created({
+      message: 'Akun berhasil dibuat',
+      user: {
+        id: user.id,
+        nama: user.nama,
+        username: user.username,
+        role: user.role,
       },
     })
   }
@@ -43,6 +73,11 @@ export default class AuthController {
       return response.unauthorized({ error: 'Token tidak valid atau expired' })
     }
 
-    return response.ok(access.user)
+    return response.ok({
+      id: access.user.id,
+      nama: access.user.nama,
+      username: access.user.username,
+      role: access.user.role,
+    })
   }
 }
