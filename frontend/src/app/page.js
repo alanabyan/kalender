@@ -181,7 +181,7 @@ export default function KalenderPage() {
           <button onClick={goToNextMonth} className="w-10 h-10 flex items-center justify-center rounded-full bg-white border border-gray-300 shadow-sm hover:bg-gray-100 transition"><ArrowIcon direction="right" /></button>
         </div>
 
-        <div className="h-[75vh] min-h-[550px] bg-white p-4 rounded-lg shadow">
+        <div className="h-[75vh] min-h-[500px] bg-white  rounded-lg shadow">
           <div className="flex flex-col md:flex-row gap-4 items-center mb-4">
             <select
               value={selectedJurusanId}
